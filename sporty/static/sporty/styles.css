@@ -1,0 +1,235 @@
+body{
+	min-width: fit-content;
+}
+#minute{
+	color: red;
+}
+.weeks{
+	text-align: center;
+	margin: 20px;
+}
+.weeks span{
+	margin:  0 10px;
+}
+.weeks .btn{
+	border: solid 1px grey;
+}
+#navbar{
+	background-color: #e41827;
+	margin-bottom: 20px;
+}
+#navbar #a{
+	margin-left: 50px;
+}
+@media (max-width: 768px){
+	#navbar .nav-item{
+		margin-left: 50px;
+		text-align: right;
+	}
+}
+.box{
+	width: 700px;
+	margin: 0 auto;
+}
+.the_date{
+	margin-left:65px;
+}
+.match_container{
+	border: solid 1px #C4C4C4;
+	padding: 6px;
+	margin: 5px 10px 25px;
+	border-radius: 25px;
+}
+.empty_div{
+	height: 12px;
+}
+.match{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+.main_page_logo img{
+	height: 30px;
+	margin: 0 5px;
+}
+/* minutes hf and ft */
+.status{
+	font-size: 11px;
+	display: flex;
+	direction: ltr;
+	justify-content: center;
+	align-items: center;
+	height: 12px;
+}
+/* home and away sides in main page */
+.home{
+	justify-content: flex-end;
+}
+.home,.away{
+	flex: 1;
+	display: flex;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+/* main page score */
+.score{ 
+	width: 150px;
+	text-align: center;
+}
+.no_games{
+	color: grey;
+	text-align: center;
+	font-weight: bold;
+	font-size: 25px;
+}
+.logging{
+	margin: 0px 30px;
+}
+/* match_page_logo */
+.match_page_logo img{
+	height: 80px;
+}
+.match_page_logo{
+	flex: 1;
+	display: flex;
+	justify-content: center
+}
+.match_page_score{
+	width: 300px;
+	font-weight: bold;
+	font-size: 40px;
+	text-align: center;
+}
+.match_status{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+#star, #top_status, #empty{
+	display: flex;
+	flex: 1;
+}
+#top_status{
+	justify-content: center;
+}
+#star{
+	font-size: 22px;
+}
+/* match stats table */
+#stats_box table{
+	width: 100%;
+	border-collapse: separate;
+	/* first param horizontal, second vertical */
+	border-spacing: 0px 20px;
+}
+#top_box{
+	margin-bottom: 35px;
+}
+.mid_col, .right_col, .left_col{
+	text-align: center;
+}
+.mid_col{
+	width: 42%;
+}
+.right_col, .left_col{
+	width: 29%;
+}
+/* match standings table */
+#standings, #stats_box{
+	display: none;
+}
+#standings table{
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0px 20px;
+}
+#standings table td{
+	text-align: center;
+	border-bottom: 1px solid grey;
+	padding-bottom: 20px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+#standings table td:first-child{
+	text-align: left;
+}
+#standings table td:last-child{
+	font-weight: bold;
+}
+#standings table tr{
+	border: 1px solid black;
+}
+#s_logo{
+	height: 30px;
+	margin-right: 10px;
+}
+#select_bar{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	margin: 30px 0px;
+}
+#select_bar div{
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 40px;
+}
+#select_bar div{
+   color: grey;
+}
+#match_events_link{
+	color: black !important;
+	border-bottom: 2px solid red;
+}
+#select_bar div:hover{
+   border-bottom: 2px solid red !important;
+}
+h3{
+	margin-left: 15px;
+}
+/* match events */
+#events_box{
+	margin: 25px 50px;
+}
+#single_event{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+	height: 50px;
+}
+#home_events, #away_events, #empty_event{
+	flex: 3;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+#event_time{
+	flex: 1;
+	text-align: center;
+	font-weight: bold;
+}
+#assisted{
+	font-size: 12px;
+	color: grey;
+}
+#in_player{
+	color: green;
+}
+#out_player{
+	font-size: 13px;
+	color: red;
+}
+#away_events #out_player,#away_events #in_player,#away_events #assisted{
+	text-align: right;
+}
+#star{
+	float: left;
+}

@@ -1,0 +1,356 @@
+{% extends "sporty/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="box" id="match">
+
+<div id="top_box">
+	<div class="match_status">
+		<div id="star">
+			{% if user.is_authenticated %}
+				{% if starred %}
+		 			<i id="star_icon" class="fas fa-star" data-value="{{data.match_id}}" onclick="starry(this)"></i> 
+				{% else %}
+					<i id="star_icon" class="far fa-star" data-value="{{data.match_id}}" onclick="starry(this)"></i> 
+				{% endif %}
+		 	{% endif %}
+		</div>
+		<div id="top_status">
+			{% if data.status_code == 1%}
+				<span id="minute">{{data.minute}}'</span>
+			{% elif data.status_code == 11%}
+				HT
+			{% elif data.status_code == 3 %}
+				Finished
+			{% elif data.status_code == 4 %}
+				Postponed
+			{% else %}
+				{{m_date|date:"d/m"}}
+			{% endif %}
+		</div>
+		<div id="empty"></div>
+	</div>
+	<div class="match">
+		<div class="match_page_logo" >
+			<div data-value="{{data.home_team.team_id}}" onclick="open_club(this)">
+				<img src="{{data.home_team.logo}}">
+			</div>
+		</div>
+		<div class="match_page_score">
+			{% if data.status_code == 0 %}
+				{{m_time}}
+
+			{% elif data.status_code == 17 %}
+				TBD
+
+			{% elif data.status_code == 4 %}
+				Postponed
+
+			{% elif data.status_code == 1 or data.status_code == 11 or data.status_code == 3 %}
+				{{data.match_statistics.0.goals}} : {{data.match_statistics.1.goals}}
+
+			{% endif %}
+		</div>
+		<div class="match_page_logo">
+			<div data-value="{{data.away_team.team_id}}" onclick="open_club(this)">
+				<img src="{{data.away_team.logo}}">
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="select_bar">
+	<div id = "match_events_link" data-value = "match_events" onclick="change_section(this)">Match</div>
+	<div id = "stats_box_link" data-value = "stats_box" onclick="change_section(this)">Stats</div>
+	<div id = "standings_link" data-value = "standings" onclick="change_section(this)">Standings</div>
+</div>
+
+<div id="match_events">
+	<h3>
+		Match Events
+	</h3>
+	{% if data.status_code == 1 or data.status_code == 11 or data.status_code == 3 %}
+	<div id="events_box">
+		{% for event in data.match_events %}
+			{% if event.type == 'goal' or event.type == 'yellowcard' or event.type == 'substitution' or event.type == 'redcard'%}
+
+				<div id="single_event">
+					{% if event.team_id == home_id %}
+						{% if event.type == 'goal' %}
+							<div id="home_events">
+								<div id="goal_details">
+									<div id="player_name">{{event.player_name}}</div>
+									{% if event.related_player_name %}
+										<div id="assisted">({{event.related_player_name}})</div>
+									{% endif %}
+
+								</div>
+								<div id="goal_logo"><i class="fas fa-futbol"></i></div>
+							</div>
+
+						{% elif event.type == 'yellowcard' %}
+							<div id="home_events">
+								<div id="player_name">{{event.player_name}}</div>
+								<div><img src="{% static 'sporty/yellow_card.png'%}"></div>
+							</div>
+
+						{% elif event.type == 'redcard' %}
+							<div id="home_events">
+								<div id="player_name">{{event.player_name}}</div>
+								<div><img src="{% static 'sporty/red_card.png'%}"></div>
+							</div>
+
+						{% elif event.type == 'substitution' %}
+							<div id="home_events">
+								<div id="sub_details">
+									<div id="in_player">{{event.player_name}}</div>
+									<div id="out_player">{{event.related_player_name}}</div>
+								</div>
+								<div><i class="fas fa-exchange-alt"></i></div>
+							</div>
+
+						{% else %}
+							<div id="home_events">{{event.type}}</div>
+						{% endif %}
+						<div id="event_time">{{event.minute}}'</div>
+						<div id="empty_event"></div>
+					{% endif %}
+
+					
+
+					{% if event.team_id == away_id %}
+						<div id="empty_event"></div>
+						<div id="event_time">{{event.minute}}'</div>
+						{% if event.type == 'goal' %}
+							<div id="away_events">
+								<div id="goal_logo"><i class="fas fa-futbol"></i></div>
+								<div id="goal_details">
+									<div id="player_name">{{event.player_name}}</div>
+									{% if event.related_player_name %}
+										<div id="assisted">({{event.related_player_name}})</div>
+									{% endif %}
+								</div>
+							</div>
+						{% elif event.type == 'yellowcard' %}
+							<div id="away_events">
+								<div><img src="{% static 'sporty/yellow_card.png'%}"></div>
+								<div id="player_name">{{event.player_name}}</div>
+							</div>
+
+						{% elif event.type == 'redcard' %}
+							<div id="away_events">
+								<div><img src="{% static 'sporty/red_card.png'%}"></div>
+								<div id="player_name">{{event.player_name}}</div>
+							</div>
+
+						{% elif event.type == 'substitution' %}
+							<div id="away_events">
+								<div><i class="fas fa-exchange-alt"></i></div>
+								<div id="sub_details">
+									<div id="in_player">{{event.player_name}}</div>
+									<div id="out_player">{{event.related_player_name}}</div>
+								</div>
+							</div>
+
+						{% else %}
+							<div id="away_events">{{event.type}}</div>
+						{% endif %}
+					{% endif %}
+				</div>
+
+			{% endif %}
+		{% endfor %}
+	{% else %}
+		<div class="no_games"> Events are avaliable when match starts </div>
+	{% endif %}
+	</div>
+</div>
+
+<div id="standings" class="box">
+	<h3>
+		Standings
+	</h3>
+	<table>
+		<tr>
+			<td id="club_col">
+				club
+			</td>
+
+			<td>
+				MP
+			</td>
+
+			<td>
+				W:D:L
+			</td>
+
+			<td>
+				F:A
+			</td>
+
+			<td>
+				+/-
+			</td>
+
+			<td>
+				PTS
+			</td>
+		</tr>
+	{% for club in standings %}
+		<tr>
+			<td id="club_col">
+				<img src="{{club.logo}}" id="s_logo"><span>{{club.name}}</span>
+			</td>
+
+			<td>
+				{{club.overall.games_played}}
+			</td>
+
+			<td>
+				{{club.overall.won}}:{{club.overall.draw}}:{{club.overall.lost}}
+			</td>
+
+			<td>
+				{{club.overall.goals_scored}}:{{club.overall.goals_against}}
+			</td>
+
+			<td>
+				{{club.overall.goals_diff}}
+			</td>
+
+			<td>
+				{{club.points}}
+			</td>
+		</tr>
+	{% endfor %}
+	</table>
+</div>
+
+<div id="stats_box" class="box">
+		<h3>
+			Stats
+		</h3>
+	{% if data.status_code == 1 or data.status_code == 11 or data.status_code == 3%}
+		<table>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.shots_total}}
+				</td>
+				<th class="mid_col">
+					Shots
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.shots_total}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.shots_on_target}}
+				</td>
+				<th class="mid_col">
+					Shots on target
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.shots_on_target}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.possessionpercent}}%
+				</td>
+				<th class="mid_col">
+					Possession
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.possessionpercent}}%
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.fouls}}
+				</td>
+				<th class="mid_col">
+					Fouls
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.fouls}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.yellowcards}}
+				</td>
+				<th class="mid_col">
+					Yellow cards
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.yellowcards}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{% load mathfilters %}
+					{{data.match_statistics.0.yellowredcards | addition:data.match_statistics.0.redcards}}
+				</td>
+				<th class="mid_col">
+					Red cards
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.yellowredcards | addition:data.match_statistics.1.redcards}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.offsides}}
+				</td>
+				<th class="mid_col">
+					Offsides
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.offsides}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.corners}}
+				</td>
+				<th class="mid_col">
+					Corners
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.corners}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.shots_blocked}}
+				</td>
+				<th class="mid_col">
+					Saves
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.shots_blocked}}
+				</td>
+			</tr>
+			<tr>
+				<td class="left_col">
+					{{data.match_statistics.0.free_kick}}
+				</td>
+				<th class="mid_col">
+					Free kicks
+				</th>
+				<td class="right_col">
+					{{data.match_statistics.1.free_kick}}
+				</td>
+			</tr>
+		</table>
+	{% else %}
+		<div class="no_games"> Stats are avaliable when match starts </div>
+</div>
+	{% endif %}
+</div>
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'sporty/sporty.js' %}"></script>
+{% endblock %}

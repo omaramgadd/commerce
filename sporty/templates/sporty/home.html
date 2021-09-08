@@ -1,0 +1,14 @@
+{% extends "sporty/layout.html" %}
+{% load static %}
+
+{% block body %}
+
+<div class="box" id="matchweek">
+	{% include "sporty/matchweek.html" %}
+</div>
+
+{% endblock %}
+
+{% block script %}
+	<script src="{% static 'sporty/sporty.js' %}"></script>
+{% endblock %}
