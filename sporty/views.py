@@ -122,6 +122,8 @@ def match(request, id):
 	s_data = s.get("data")
 	standings = s_data.get("standings")
 
+	starred = None
+
 	if request.user.is_authenticated:
 		try:
 			starred = Star.objects.get(user = request.user, match = match_id)
