@@ -1,0 +1,71 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+	<div class="post-container">
+   		<div class="post-thumb"><img src="{{listing.url}}"></div>
+   		<div class="post-content">
+   			<h3 class="post-title">{{listing.title}}<hr></h3>
+   			<br><p style="font-weight: bold">Current Bid: {{listing.starting_bid}}$</p>
+   			<br>Posted by: {{listing.user.username}}
+			<br>Description: {{listing.description}}
+			<br>Category: {{listing.category.name}}
+		</div>
+	</div>
+	
+	
+	{% if message %}
+		<div class="post-content"><br><b>{{message}}</b></div>
+	{% else %}
+		{% if user.username == listing.user.username %}
+		<div class="post-content">
+			<form action="{% url 'close' listing.title %}" method="POST">
+				{% csrf_token%}
+				<input type="submit"  value="close" class="btn btn-primary" style="margin-top: 15px">
+			</form>
+		</div>
+		{% else %}
+			{% if in_watchlist %}
+			<div class="post-content">
+				<form action="{% url 'remove_from_watchlist' listing.title %}" method = "POST">
+					{% csrf_token%}
+					<input type="submit" name="remove_from_watchlist" value="Remove From watchlist" style="margin-bottom: 10px" class="btn btn-primary">
+				</form>
+			</div>
+			{% else %}
+			<div class="post-content">
+				<form action="{% url 'add_to_watchlist' listing.title %}"method = "POST">
+					{% csrf_token%}
+					<input type="submit" name="add_to_watchlist" value="Add to watchlist" style="margin-bottom: 10px" class="btn btn-primary">
+				</form>
+			</div>
+			{% endif %}
+		<div class="post-content">
+			<form action="{% url 'listing' listing.title %}" method="POST" class="form-inline">
+				{% csrf_token%}
+				<input type="number" name="bid" min={{min}} class="form-control" style="max-width: 200px;" placeholder="Your bid">
+				<input type="submit" value="Add your bid" class="btn btn-primary mb-2" style="margin-left: 20px; margin-top: 8px">
+			</form>
+		</div>
+			
+		{% endif %}
+	{% endif %}
+
+	
+	<hr>
+	<h3>Comments</h3>
+	<div style="margin: 15px">
+	{% for comment in comments %}
+		<div style="margin-bottom: 10px">
+		<b>{{comment.user}}</b>: {{comment.comment}}<br>
+		</div>
+	{% empty %}
+		This item has no comments
+	{% endfor %}
+	</div>
+	<form action="{% url 'comment' listing.title %}" method="POST" class="form-inline">
+		{% csrf_token%}
+		<input type="text" name="comment" class="form-control" style="max-width: 200px;" placeholder="Write a comment... ">
+		<input type="submit" value="Add your Comment" class="btn btn-primary mb-2" style="margin-left: 20px; margin-top: 8px">
+	</form>
+
+{% endblock %}
